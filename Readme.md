@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Малец](https://up.htmlacademy.ru/javascript/14/user/390279).
-* Наставник: `Неизвестно`.
+* Наставник: [Павел Скрипкин](https://up.htmlacademy.ru/javascript/14/user/604273).
 
 ---
 
