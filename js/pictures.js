@@ -21,6 +21,49 @@ var DESCRIPTIONS = [
   'Вот это тачка!'
 ];
 var COMMENTS_COUNT = 2;
+var ESC_KEYCODE = 27;
+var EFFECTS = [
+  {
+    name: 'none'
+  },
+  {
+    name: 'chrome',
+    filter: 'grayscale',
+    maxValue: 1,
+    measure: ''
+  },
+  {
+    name: 'sepia',
+    filter: 'sepia',
+    maxValue: 1,
+    measure: ''
+  },
+  {
+    name: 'marvin',
+    filter: 'invert',
+    maxValue: 100,
+    measure: '%'
+  },
+  {
+    name: 'phobos',
+    filter: 'blur',
+    maxValue: 3,
+    measure: 'px'
+  },
+  {
+    name: 'heat',
+    filter: 'brightness',
+    maxValue: 3,
+    measure: ''
+  }
+];
+
+var INITIAL_COORDS = {
+  start: 0,
+  max: 450
+};
+
+var MAX_PERCENT = 100;
 var gallery = [];
 
 // функция получения случайного значения
@@ -91,11 +134,133 @@ var createPictureElements = function () {
   fillCommentsContent();
 
   bigPicture.querySelector('.social__caption').textContent = gallery[0].description;
-
-  bigPicture.classList.remove('hidden');
   bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
   bigPicture.querySelector('.social__loadmore').classList.add('visually-hidden');
 };
 
 createPhotoElements(URLS_COUNT);
 createPictureElements(URLS_COUNT);
+
+// MODULE4-TASK 1 START
+
+// Загрузка изображения и показ формы редактирования
+
+var imgUploadStart = document.querySelector('.img-upload__start');
+var uploadFile = document.querySelector('#upload-file');
+var uploadFileOverlay = document.querySelector('.img-upload__overlay');
+var uploadFileOverlayClose = document.querySelector('#upload-cancel');
+var main = document.querySelector('main');
+
+var bigPicture = document.querySelector('.big-picture.overlay');
+var bigPictureClose = document.querySelector('#picture-cancel');
+
+var pictureLink = document.querySelectorAll('.picture__link');
+
+for (var j = 0; j < URLS_COUNT; j++) {
+  pictureLink[j].addEventListener('click', function () {
+    bigPicture.classList.remove('hidden');
+  });
+}
+
+uploadFile.addEventListener('change', function () {
+  uploadFileOverlay.classList.remove('hidden');
+  imgUploadScale.style.display = 'none';
+});
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var closePopup = function () {
+  uploadFileOverlay.classList.add('hidden');
+  bigPicture.classList.add('hidden');
+};
+
+imgUploadStart.addEventListener('keydown', onPopupEscPress);
+uploadFileOverlay.addEventListener('keydown', onPopupEscPress);
+uploadFileOverlayClose.addEventListener('click', function () {
+  closePopup();
+});
+
+main.addEventListener('keydown', onPopupEscPress);
+bigPictureClose.addEventListener('click', function () {
+  closePopup();
+});
+
+// Применение эффекта для изображения и Редактирование размера изображения
+
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var effectsItem = document.querySelectorAll('.effects__item');
+var imgUploadScale = document.querySelector('.img-upload__scale');
+var currentFilter = '';
+
+var onePixelIndent = INITIAL_COORDS.max / MAX_PERCENT;
+var effectValue = function (filter) {
+  for (var i = 0; i < EFFECTS.length; i++) {
+    if (EFFECTS[i].name === filter) {
+      var oneValuePercent = EFFECTS[i].maxValue / MAX_PERCENT;
+      imgUploadPreview.style.filter = EFFECTS[i].filter + '(' + parseInt(scaleLevel.style.width, 10) * oneValuePercent / onePixelIndent + EFFECTS[i].measure + ')';
+    }
+  }
+};
+
+var effectAccept = function (i) {
+  effectsItem[0].addEventListener('click', function () {
+    imgUploadScale.style.display = 'none';
+    imgUploadPreview.style.filter = 'none';
+  });
+  effectsItem[i].addEventListener('click', function () {
+    imgUploadScale.style.display = 'block';
+    getStyleForScale(INITIAL_COORDS.max);
+    imgUploadPreview.className = 'img-upload__preview';
+    imgUploadPreview.classList.add('effects__preview--' + EFFECTS[i].name);
+    imgUploadPreview.removeAttribute('style');
+    currentFilter = EFFECTS[i].name;
+  });
+};
+
+for (var i = 1; i < EFFECTS.length; i++) {
+  effectAccept(i);
+}
+
+var scaleLine = document.querySelector('.scale__line');
+var pinHandle = scaleLine.querySelector('.scale__pin');
+var scaleLevel = scaleLine.querySelector('.scale__level');
+
+
+var getStyleForScale = function (coords) {
+  pinHandle.style.left = coords + 'px';
+  scaleLevel.style.width = coords + 'px';
+};
+
+pinHandle.addEventListener('mousedown', function (evt) {
+  var startCoords = evt.clientX;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = startCoords - moveEvt.clientX;
+    startCoords = moveEvt.clientX;
+    var pinHandleCoords = pinHandle.offsetLeft - shift;
+
+    if (pinHandleCoords < INITIAL_COORDS.start) {
+      pinHandleCoords = INITIAL_COORDS.start;
+    }
+    if (pinHandleCoords > INITIAL_COORDS.max) {
+      pinHandleCoords = INITIAL_COORDS.max;
+    }
+
+    getStyleForScale(pinHandleCoords);
+    effectValue(currentFilter);
+  };
+
+  var onMouseUp = function () {
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
