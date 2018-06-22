@@ -67,25 +67,40 @@ var HASH_ERRORS = [
   {
     name: 'sharpError',
     message: 'Хэш-тег должен начинаться с символа # (решётка)',
+    validity: function (index) {
+      return hashTags[index].charAt(HASH_ERRORS[0].value) !== '#';
+    },
     value: 0
   },
   {
     name: 'oneSharp',
     message: 'Хэш-тег не может состоять только из одной решётки',
+    validity: function (index) {
+      return hashTags[index].length === HASH_ERRORS[1].value;
+    },
     value: 1
   },
   {
     name: 'repeatHash',
+    validity: function (y, counter) {
+      return hashTags[y].toLowerCase() === hashTags[counter].toLowerCase();
+    },
     message: 'Один и тот же хэш-тег не может быть использован дважды'
   },
   {
     name: 'moreThanFive',
     message: 'Нельзя указать больше пяти хэш-тегов',
+    validity: function () {
+      return hashTags.length > HASH_ERRORS[3].value;
+    },
     value: 5
   },
   {
     name: 'maxLength',
     message: 'Максимальная длина хэш-тега не может превышать 20 символов, включая решётку',
+    validity: function (index) {
+      return hashTags[index].length > HASH_ERRORS[4].value;
+    },
     value: 20
   }
 ];
@@ -339,22 +354,21 @@ hashTagsInput.addEventListener('input', function (evt) {
   for (var index = 0; index < hashTags.length; index++) {
     if (hashTagsString.length === 0) {
       resetHashTags(target);
-    } else if (hashTags[index].length === HASH_ERRORS[1].value) {
+    } else if (HASH_ERRORS[1].validity(index)) {
       setHashTagsError(target, HASH_ERRORS, 1);
-    } else if (hashTags.length > HASH_ERRORS[3].value) {
+    } else if (HASH_ERRORS[3].validity()) {
       setHashTagsError(target, HASH_ERRORS, 3);
-    } else if (hashTags[index].length > HASH_ERRORS[4].value) {
+    } else if (HASH_ERRORS[4].validity(index)) {
       setHashTagsError(target, HASH_ERRORS, 4);
-    } else if (hashTags[index].charAt(HASH_ERRORS[0].value) !== '#') {
+    } else if (HASH_ERRORS[0].validity(index)) {
       setHashTagsError(target, HASH_ERRORS, 0);
     } else {
       resetHashTags(target);
     }
-    for (var l = 0; l < hashTags.length - 1; l++) {
-      for (var k = l + 1; k < hashTags.length; k++) {
-        if (hashTags[l].toLowerCase() === hashTags[k].toLowerCase()) {
-          setHashTagsError(target, HASH_ERRORS, 2);
-        }
+    for (var y = 0; y < hashTags.length - 1; y++) {
+      var counter = y + 1;
+      if (HASH_ERRORS[2].validity(y, counter)) {
+        setHashTagsError(target, HASH_ERRORS, 2);
       }
     }
   }
