@@ -312,6 +312,7 @@ pinHandle.addEventListener('mousedown', function (evt) {
   };
 
   var onMouseUp = function () {
+    effectValue(currentFilter);
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
