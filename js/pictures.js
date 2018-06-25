@@ -12,14 +12,14 @@
 
       photoElement.querySelector('.picture__img').setAttribute('src', window.data.gallery[i].url);
       photoElement.querySelector('.picture__stat--likes').textContent = window.data.gallery[i].likes;
-      photoElement.querySelector('.picture__stat--comments').textContent = window.util.getRandomItem(window.const.MAX_COMENTS_COUNT);
+      photoElement.querySelector('.picture__stat--comments').textContent = window.util.getRandomItem(window.constants.MAX_COMENTS_COUNT);
 
       fragment.appendChild(photoElement);
     }
 
     photosListElement.appendChild(fragment);
   }
-  createPhotoElements(window.const.URLS_COUNT);
+  createPhotoElements(window.constants.URLS_COUNT);
 
   var pictureLink = document.querySelectorAll('.picture__link');
 

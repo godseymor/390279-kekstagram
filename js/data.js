@@ -23,9 +23,9 @@
       for (var i = 1; i <= images; i++) {
         window.data.gallery.push({
           url: 'photos/' + i + '.jpg',
-          likes: window.util.getRandomItem(window.const.LIKES_COUNT),
-          comments: COMMENTS[window.util.getRandomItem(COMMENTS)],
-          description: DESCRIPTIONS[window.util.getRandomItem(DESCRIPTIONS)]
+          likes: window.util.getRandomItem(window.constants.LIKES_COUNT),
+          comments: window.util.getRandomElement(COMMENTS),
+          description: window.util.getRandomElement(DESCRIPTIONS)
         });
       }
       return images;
