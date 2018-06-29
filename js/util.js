@@ -1,33 +1,50 @@
 'use strict';
 
 (function () {
-  var MIN_LIKES_COUNT = 15;
-  // FIXME:
   window.util = {
-    getRandomItem: function (n) {
-      if (n === window.constants.LIKES_COUNT) {
-        n = Math.floor(Math.random() * n);
-        if (n < MIN_LIKES_COUNT) {
-          return window.util.getRandomItem(window.constants.LIKES_COUNT);
-        }
-      } else if (typeof (n) === 'object') {
-        n = (Math.floor(Math.random() * n.length));
-      } else if (n === window.constants.MAX_COMENTS_COUNT) {
-        n = (Math.ceil(Math.random() * n));
-      }
-      return n;
+    getRandomNumber: function (n) {
+      return (Math.ceil(Math.random() * n));
     },
     getRandomElement: function (array) {
       return array[(Math.floor(Math.random() * array.length))];
     },
     closePopup: function () {
-      window.bigPicture.uploadFileOverlay.classList.add('hidden');
-      window.bigPicture.bigPicture.classList.add('hidden');
+      window.pictures.uploadFileOverlay.classList.add('hidden');
+      window.pictures.bigPicture.classList.add('hidden');
+      document.body.classList.remove('modal-open');
     },
     onPopupEscPress: function (evt) {
       if (evt.keyCode === window.constants.ESC_KEYCODE && !evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
         window.util.closePopup();
       }
+    },
+    serverError: function (message) {
+      document.body.classList.add('modal-open');
+      var fragment = document.createDocumentFragment();
+      var errorWindow = document.createElement('div');
+      var errorWarning = document.createElement('h2');
+      var errorMessage = document.createElement('p');
+      var errorClose = document.createElement('button');
+
+      errorWindow.classList.add('error-window');
+      errorWarning.textContent = 'Произошла ошибка';
+      errorMessage.textContent = message;
+      errorClose.textContent = 'Закрыть';
+
+      var onErrorCloseClick = function () {
+        errorWindow.classList.add('hidden');
+        document.body.classList.remove('modal-open');
+        errorClose.removeEventListener('click', onErrorCloseClick);
+      };
+
+      errorClose.addEventListener('click', onErrorCloseClick);
+
+      errorWindow.appendChild(errorWarning);
+      errorWindow.appendChild(errorMessage);
+      errorWindow.appendChild(errorClose);
+
+      fragment.appendChild(errorWindow);
+      document.body.appendChild(fragment);
     }
   };
 })();

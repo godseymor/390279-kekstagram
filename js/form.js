@@ -28,6 +28,8 @@
     }
   ];
   var hashTagsInput = document.querySelector('.text__hashtags');
+  var imgUploadForm = document.querySelector('.img-upload__form');
+  var imgUploadOverlay = imgUploadForm.querySelector('.img-upload__overlay');
   var hashTags = [];
 
   hashTagsInput.addEventListener('input', function (evt) {
@@ -70,4 +72,25 @@
   function setHashTagsError(target, array, index) {
     target.setCustomValidity(array[index].message);
   }
+
+  // FIXME: нормально реализовать снятие обработчиков и фильтров
+  function onLoad() {
+    imgUploadOverlay.classList.add('hidden');
+    imgUploadForm.removeEventListener('submit', imgUploadForm);
+    document.querySelector('#upload-file').value = '';
+    document.querySelector('.text__hashtags').textContent = '';
+    document.querySelector('.text__description').textContent = '';
+    document.querySelector('.img-upload__preview').style.filter = 'none';
+    document.querySelector('.img-upload__preview').style.transform = 'none';
+  }
+
+  function onError(message) {
+    imgUploadOverlay.classList.add('hidden');
+    window.util.serverError(message);
+  }
+
+  imgUploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.sendData(new FormData(imgUploadForm), onLoad, onError);
+  });
 })();
