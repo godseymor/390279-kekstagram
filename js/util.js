@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ESC_KEYCODE = 27;
   window.util = {
     getRandomNumber: function (n) {
       return (Math.ceil(Math.random() * n));
@@ -12,11 +13,18 @@
       window.pictures.uploadFileOverlay.classList.add('hidden');
       window.pictures.bigPicture.classList.add('hidden');
       document.body.classList.remove('modal-open');
+      window.util.clearFields();
+      window.pictures.clearComments();
     },
     onPopupEscPress: function (evt) {
-      if (evt.keyCode === window.constants.ESC_KEYCODE && !evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
+      if (evt.keyCode === ESC_KEYCODE && !evt.target.classList.contains('text__hashtags') && !evt.target.classList.contains('text__description')) {
         window.util.closePopup();
       }
+    },
+    clearFields: function () {
+      document.querySelector('#upload-select-image').reset();
+      document.querySelector('.img-upload__preview').style.filter = 'none';
+      document.querySelector('.img-upload__preview').style.transform = 'none';
     },
     serverError: function (message) {
       document.body.classList.add('modal-open');

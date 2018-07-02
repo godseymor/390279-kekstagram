@@ -59,6 +59,7 @@
   var scaleLine = document.querySelector('.scale__line');
   var pinHandle = scaleLine.querySelector('.scale__pin');
   var scaleLevel = scaleLine.querySelector('.scale__level');
+  var scaleValue = document.querySelector('.scale__value');
 
   var resizeMinus = document.querySelector('.resize__control--minus');
   var resizePlus = document.querySelector('.resize__control--plus');
@@ -69,7 +70,9 @@
     for (var i = 0; i < EFFECTS.length; i++) {
       if (EFFECTS[i].name === filter) {
         var oneValuePercent = EFFECTS[i].maxValue / MAX_PERCENT;
+        var oneScalePercent = INITIAL_COORDS.max / MAX_PERCENT;
         imgUploadPreview.style.filter = EFFECTS[i].filter + '(' + (parseInt(scaleLevel.style.width, 10) * oneValuePercent / onePixelIndent).toFixed(2) + EFFECTS[i].measure + ')';
+        scaleValue.value = (parseInt(scaleLevel.style.width, 10) / oneScalePercent).toFixed();
       }
     }
   }
@@ -91,6 +94,7 @@
       imgUploadPreview.removeAttribute('style');
       SIZES.current = SIZES.initial;
       resizeInputValue.value = SIZES.initial + '%';
+      scaleValue.value = SIZES.initial;
       currentFilter = EFFECTS[i].name;
     });
   }

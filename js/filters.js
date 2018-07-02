@@ -11,7 +11,6 @@
       clearTimeout(lastTimeout);
     }
     lastTimeout = setTimeout(func, DEBOUNCE_INTERVAL);
-
   }
 
   var filters = document.querySelector('.img-filters');
