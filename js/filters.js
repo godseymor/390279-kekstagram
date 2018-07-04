@@ -2,17 +2,6 @@
 
 (function () {
   var NEW_FILTER_PHOTOS = 10;
-  var DEBOUNCE_INTERVAL = 500;
-
-  var lastTimeout;
-
-  function debounce(func) {
-    if (lastTimeout) {
-      clearTimeout(lastTimeout);
-    }
-    lastTimeout = setTimeout(func, DEBOUNCE_INTERVAL);
-
-  }
 
   var filters = document.querySelector('.img-filters');
 
@@ -26,7 +15,7 @@
 
   function onFilterPopularClick() {
     getButtonClass(filterPopular);
-    debounce(function () {
+    window.util.debounce(function () {
       clearPhotos(filterPopular);
       window.pictures.createPhotoElements(window.pictures.gallery);
     });
@@ -36,10 +25,10 @@
 
   function onFilterNewClick() {
     getButtonClass(filterNew);
-    debounce(function () {
+    window.util.debounce(function () {
       clearPhotos();
       var newFilterGallery = [];
-      getUniquePhotos(window.pictures.gallery, newFilterGallery, NEW_FILTER_PHOTOS);
+      window.util.getUniquePhotos(window.pictures.gallery, newFilterGallery, NEW_FILTER_PHOTOS);
       window.pictures.createPhotoElements(newFilterGallery);
       newFilterGallery = [];
     });
@@ -49,7 +38,7 @@
 
   function onFilterDiscussedClick() {
     getButtonClass(filterDiscussed);
-    debounce(function () {
+    window.util.debounce(function () {
       clearPhotos(filterDiscussed);
       var discussedFilterGallery = window.pictures.gallery.slice();
       discussedFilterGallery.sort(function (first, second) {
@@ -67,14 +56,12 @@
     removeEventListener('click', filterNew);
   }
 
-  // Функция очистки области
   function clearPhotos() {
     [].forEach.call(document.querySelectorAll('.picture__link'), function (i) {
       i.parentNode.removeChild(i);
     });
   }
 
-  // Функция добавления класса кнопке
   function getButtonClass(element) {
     var filterForm = document.querySelectorAll('.img-filters__button');
     filterForm.forEach(function (item) {
@@ -82,17 +69,4 @@
     });
     element.classList.add('img-filters__button--active');
   }
-
-  // функция получения случайных уникальных фотографий
-  function getUniquePhotos(source, target, count) {
-    for (var i = 0; i < count; i++) {
-      var currentPhoto = window.util.getRandomElement(source);
-      if (target.indexOf(currentPhoto) === -1) {
-        target.push(currentPhoto);
-      } else {
-        i--;
-      }
-    }
-  }
-
 })();

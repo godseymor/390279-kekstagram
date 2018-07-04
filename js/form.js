@@ -37,7 +37,6 @@
     var hashTagsString = hashTagsInput.value;
     hashTags = hashTagsString.split(' ');
 
-    // FIXME:
     for (var index = 0; index < hashTags.length; index++) {
       if (hashTagsString.length === 0) {
         resetHashTags(target);
@@ -73,20 +72,17 @@
     target.setCustomValidity(array[index].message);
   }
 
-  // FIXME: нормально реализовать снятие обработчиков и фильтров
   function onLoad() {
     imgUploadOverlay.classList.add('hidden');
     imgUploadForm.removeEventListener('submit', imgUploadForm);
-    document.querySelector('#upload-file').value = '';
-    document.querySelector('.text__hashtags').textContent = '';
-    document.querySelector('.text__description').textContent = '';
-    document.querySelector('.img-upload__preview').style.filter = 'none';
-    document.querySelector('.img-upload__preview').style.transform = 'none';
+    window.util.clearFields();
   }
 
-  function onError(message) {
+  function onError() {
     imgUploadOverlay.classList.add('hidden');
-    window.util.serverError(message);
+    document.body.querySelector('main').classList.add('hidden');
+    document.body.appendChild(window.pictures.errorMessage);
+    window.pictures.errorMessage.classList.remove('hidden');
   }
 
   imgUploadForm.addEventListener('submit', function (evt) {
