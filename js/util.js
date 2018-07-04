@@ -2,12 +2,28 @@
 
 (function () {
   var ESC_KEYCODE = 27;
+  var DEBOUNCE_INTERVAL = 500;
   window.util = {
+    lastTimeout: '',
+    debounce: function (func) {
+      if (window.util.lastTimeout) {
+        clearTimeout(window.util.lastTimeout);
+      }
+      window.util.lastTimeout = setTimeout(func, DEBOUNCE_INTERVAL);
+    },
     getRandomNumber: function (n) {
       return (Math.ceil(Math.random() * n));
     },
     getRandomElement: function (array) {
       return array[(Math.floor(Math.random() * array.length))];
+    },
+    getArrayIndex: function (currentPhotoUrl, images) {
+      for (var i = 0; i < images.length; i++) {
+        if (currentPhotoUrl === images[i].url) {
+          var arrayIndex = i;
+        }
+      }
+      return arrayIndex;
     },
     closePopup: function () {
       window.pictures.uploadFileOverlay.classList.add('hidden');
@@ -53,6 +69,16 @@
 
       fragment.appendChild(errorWindow);
       document.body.appendChild(fragment);
+    },
+    getUniquePhotos: function (source, target, count) {
+      for (var i = 0; i < count; i++) {
+        var currentPhoto = window.util.getRandomElement(source);
+        if (target.indexOf(currentPhoto) === -1) {
+          target.push(currentPhoto);
+        } else {
+          i--;
+        }
+      }
     }
   };
 })();

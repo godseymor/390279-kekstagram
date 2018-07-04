@@ -37,7 +37,6 @@
     var hashTagsString = hashTagsInput.value;
     hashTags = hashTagsString.split(' ');
 
-    // FIXME:
     for (var index = 0; index < hashTags.length; index++) {
       if (hashTagsString.length === 0) {
         resetHashTags(target);
