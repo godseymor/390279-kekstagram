@@ -70,7 +70,7 @@
     hashTags = hashTagsString.split(' ');
 
     hashTags.forEach(function () {
-      validateHashTags(target);
+      return hashTagsString.length > 0 ? validateHashTags(target) : resetHashTags(target);
     });
   });
 
