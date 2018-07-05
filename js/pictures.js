@@ -33,6 +33,7 @@
   var loadMore = document.querySelector('.social__loadmore');
 
   var picturePreview = document.querySelector('.img-upload__preview img');
+  var effectsPreview = document.querySelectorAll('.effects__preview');
 
   function onLoad(data) {
     data.forEach(function (item) {
@@ -73,6 +74,9 @@
 
       reader.addEventListener('load', function () {
         picturePreview.src = reader.result;
+        for (var i = 0; i < effectsPreview.length; i++) {
+          effectsPreview[i].setAttribute('style', 'background-image: url(' + picturePreview.src + ');');
+        }
       });
 
       reader.readAsDataURL(file);

@@ -3,28 +3,60 @@
 (function () {
   var HASH_ERRORS = [
     {
-      name: 'sharpError',
       message: 'Хэш-тег должен начинаться с символа # (решётка)',
-      value: 0
+      value: 0,
+      validity: function () {
+        for (var i = 0; i < hashTags.length; i++) {
+          if (hashTags[i].charAt(HASH_ERRORS[0].value) !== '#') {
+            return true;
+          }
+        }
+        return false;
+      }
     },
     {
-      name: 'oneSharp',
       message: 'Хэш-тег не может состоять только из одной решётки',
-      value: 1
+      value: 1,
+      validity: function () {
+        for (var i = 0; i < hashTags.length; i++) {
+          if (hashTags[i].length === HASH_ERRORS[1].value) {
+            return true;
+          }
+        }
+        return false;
+      }
     },
     {
-      name: 'repeatHash',
-      message: 'Один и тот же хэш-тег не может быть использован дважды'
+      message: 'Один и тот же хэш-тег не может быть использован дважды',
+      validity: function () {
+        for (var i = 0; i < hashTags.length - 1; i++) {
+          for (var j = i + 1; j < hashTags.length; j++) {
+            if (hashTags[i].toLowerCase() === hashTags[j].toLowerCase()) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
     },
     {
-      name: 'moreThanFive',
       message: 'Нельзя указать больше пяти хэш-тегов',
-      value: 5
+      value: 5,
+      validity: function () {
+        return hashTags.length > HASH_ERRORS[3].value ? true : false;
+      }
     },
     {
-      name: 'maxLength',
       message: 'Максимальная длина хэш-тега не может превышать 20 символов, включая решётку',
-      value: 20
+      value: 20,
+      validity: function () {
+        for (var i = 0; i < hashTags.length; i++) {
+          if (hashTags[i].length > HASH_ERRORS[4].value) {
+            return true;
+          }
+        }
+        return false;
+      }
     }
   ];
   var hashTagsInput = document.querySelector('.text__hashtags');
@@ -37,31 +69,23 @@
     var hashTagsString = hashTagsInput.value;
     hashTags = hashTagsString.split(' ');
 
-    for (var index = 0; index < hashTags.length; index++) {
-      if (hashTagsString.length === 0) {
-        resetHashTags(target);
-      } else if (hashTags[index].length === HASH_ERRORS[1].value) {
-        setHashTagsError(target, HASH_ERRORS, 1);
-      } else if (hashTags.length > HASH_ERRORS[3].value) {
-        setHashTagsError(target, HASH_ERRORS, 3);
-      } else if (hashTags[index].length > HASH_ERRORS[4].value) {
-        setHashTagsError(target, HASH_ERRORS, 4);
-      } else if (hashTags[index].charAt(HASH_ERRORS[0].value) !== '#') {
-        setHashTagsError(target, HASH_ERRORS, 0);
-      } else {
-        resetHashTags(target);
-      }
-      for (var y = 0; y < hashTags.length - 1; y++) {
-        var counter = y + 1;
-        if (hashTags[y].toLowerCase() === hashTags[counter].toLowerCase()) {
-          setHashTagsError(target, HASH_ERRORS, 2);
-        }
-      }
-    }
-    if (!hashTagsInput.validity.valid) {
-      hashTagsInput.style.outline = '2px solid red';
-    }
+    hashTags.forEach(function () {
+      validateHashTags(target);
+    });
   });
+
+  function validateHashTags(target) {
+    for (var index = 0; index < hashTags.length; index++) {
+      for (var j = 0; j < HASH_ERRORS.length; j++) {
+        if (HASH_ERRORS[j].validity()) {
+          hashTagsInput.style.outline = '2px solid red';
+          setHashTagsError(target, HASH_ERRORS, j);
+          break;
+        }
+        resetHashTags(target);
+      }
+    }
+  }
 
   function resetHashTags(target) {
     target.style.outline = 'inherit';
