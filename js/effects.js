@@ -76,14 +76,14 @@
       }
     }
   }
-  // Функция снятия фильтров с изображения
+
   function removeFilter(index) {
     effectsItem[index].addEventListener('click', function () {
       imgUploadScale.style.display = 'none';
       imgUploadPreview.style.filter = 'none';
     });
   }
-  // Функция применения фильтров на изображение
+
   function effectAccept(i) {
     removeFilter(0);
     effectsItem[i].addEventListener('click', function () {
@@ -99,7 +99,6 @@
     });
   }
 
-  // Наложение эффекта на изображение
   function getStyleForScale(coords) {
     pinHandle.style.left = coords + 'px';
     scaleLevel.style.width = coords + 'px';
@@ -139,8 +138,6 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-
-  // Масштаб
 
   function scalePhoto() {
     resizeInputValue.value = SIZES.current + '%';
