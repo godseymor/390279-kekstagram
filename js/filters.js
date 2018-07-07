@@ -19,8 +19,6 @@
       clearPhotos(filterPopular);
       window.pictures.createPhotoElements(window.pictures.gallery);
     });
-    removeEventListener('click', filterNew);
-    removeEventListener('click', filterDiscussed);
   }
 
   function onFilterNewClick() {
@@ -32,8 +30,6 @@
       window.pictures.createPhotoElements(newFilterGallery);
       newFilterGallery = [];
     });
-    removeEventListener('click', filterPopular);
-    removeEventListener('click', filterDiscussed);
   }
 
   function onFilterDiscussedClick() {
@@ -46,14 +42,11 @@
           return -1;
         } else if (first.comments.length < second.comments.length) {
           return 1;
-        } else {
-          return 0;
         }
+        return 0;
       });
       window.pictures.createPhotoElements(discussedFilterGallery);
     });
-    removeEventListener('click', filterPopular);
-    removeEventListener('click', filterNew);
   }
 
   function clearPhotos() {

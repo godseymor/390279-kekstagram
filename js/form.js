@@ -57,6 +57,19 @@
         }
         return false;
       }
+    },
+    {
+      message: 'Хеш-теги разделяются пробелами',
+      value: 1,
+      validity: function () {
+        for (var i = 0; i < hashTags.length; i++) {
+          if (~hashTags[i].substring(HASH_ERRORS[5].value).indexOf('#')) {
+            return true;
+          }
+        }
+        return false;
+
+      }
     }
   ];
   var hashTagsInput = document.querySelector('.text__hashtags');
