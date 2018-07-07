@@ -116,7 +116,7 @@
     maxCommentsIndex: COMMENTS_INDICES.maxCommentsIndex,
     index: COMMENTS_INDICES.index,
     clearComments: function () {
-      window.pictures.commentsIndex = 0;
+      window.pictures.commentsIndex = COMMENTS_INDICES.index;
       window.pictures.maxCommentsIndex = COMMENTS_INDICES.maxCommentsIndex;
       document.querySelector('.social__loadmore').classList.remove('visually-hidden');
     },
