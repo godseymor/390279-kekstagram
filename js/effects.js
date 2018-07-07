@@ -13,35 +13,40 @@
     {
       name: 'chrome',
       filter: 'grayscale',
+      minValue: 0,
       maxValue: 1,
       measure: ''
     },
     {
       name: 'sepia',
       filter: 'sepia',
+      minValue: 0,
       maxValue: 1,
       measure: ''
     },
     {
       name: 'marvin',
       filter: 'invert',
+      minValue: 0,
       maxValue: 100,
       measure: '%'
     },
     {
       name: 'phobos',
       filter: 'blur',
+      minValue: 0,
       maxValue: 3,
       measure: 'px'
     },
     {
       name: 'heat',
       filter: 'brightness',
-      maxValue: 3,
+      minValue: 1,
+      maxValue: 2,
       measure: ''
     }
   ];
-  var SIZES = {
+  var sizes = {
     initial: 100,
     current: 100,
     resize: 25
@@ -66,12 +71,12 @@
   var resizeInputValue = document.querySelector('.resize__control--value');
 
   var onePixelIndent = INITIAL_COORDS.max / MAX_PERCENT;
-  function effectValue(filter) {
+  function setEffectValue(filter) {
     for (var i = 0; i < EFFECTS.length; i++) {
       if (EFFECTS[i].name === filter) {
         var oneValuePercent = EFFECTS[i].maxValue / MAX_PERCENT;
         var oneScalePercent = INITIAL_COORDS.max / MAX_PERCENT;
-        imgUploadPreview.style.filter = EFFECTS[i].filter + '(' + (parseInt(scaleLevel.style.width, 10) * oneValuePercent / onePixelIndent).toFixed(2) + EFFECTS[i].measure + ')';
+        imgUploadPreview.style.filter = EFFECTS[i].filter + '(' + (parseInt(scaleLevel.style.width, 10) * oneValuePercent / onePixelIndent + EFFECTS[i].minValue).toFixed(2) + EFFECTS[i].measure + ')';
         scaleValue.value = (parseInt(scaleLevel.style.width, 10) / oneScalePercent).toFixed();
       }
     }
@@ -91,10 +96,10 @@
       getStyleForScale(INITIAL_COORDS.max);
       imgUploadPreview.className = 'img-upload__preview';
       imgUploadPreview.classList.add('effects__preview--' + EFFECTS[i].name);
-      imgUploadPreview.removeAttribute('style');
-      SIZES.current = SIZES.initial;
-      resizeInputValue.value = SIZES.initial + '%';
-      scaleValue.value = SIZES.initial;
+      imgUploadPreview.style.filter = '';
+      sizes.current = sizes.initial;
+      resizeInputValue.value = sizes.initial + '%';
+      scaleValue.value = sizes.initial;
       currentFilter = EFFECTS[i].name;
     });
   }
@@ -126,11 +131,11 @@
       }
 
       getStyleForScale(pinHandleCoords);
-      effectValue(currentFilter);
+      setEffectValue(currentFilter);
     }
 
     function onMouseUp() {
-      effectValue(currentFilter);
+      setEffectValue(currentFilter);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     }
@@ -140,20 +145,20 @@
   });
 
   function scalePhoto() {
-    resizeInputValue.value = SIZES.current + '%';
-    imgUploadPreview.style.transform = 'scale(' + SIZES.current / SIZES.initial + ')';
+    resizeInputValue.value = sizes.current + '%';
+    imgUploadPreview.style.transform = 'scale(' + sizes.current / sizes.initial + ')';
   }
 
   resizeMinus.addEventListener('click', function () {
-    if (SIZES.current > SIZES.resize) {
-      SIZES.current -= SIZES.resize;
+    if (sizes.current > sizes.resize) {
+      sizes.current -= sizes.resize;
       scalePhoto();
     }
   });
 
   resizePlus.addEventListener('click', function () {
-    if (SIZES.current < SIZES.initial) {
-      SIZES.current += SIZES.resize;
+    if (sizes.current < sizes.initial) {
+      sizes.current += sizes.resize;
       scalePhoto();
     }
   });
