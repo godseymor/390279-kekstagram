@@ -135,7 +135,7 @@
           window.pictures.bigPicture.classList.remove('hidden');
           document.body.classList.add('modal-open');
 
-          var currentPhotoUrl = evt.currentTarget.querySelector('.picture__img').getAttribute('src'); // .src - получает абсолютный URL адрес, а нужен именно относительный
+          var currentPhotoUrl = evt.currentTarget.querySelector('.picture__img').src;
           var currentPhotoLikes = evt.currentTarget.querySelector('.picture__stat--likes').textContent;
           var currentPhotoCommentsCount = evt.currentTarget.querySelector('.picture__stat--comments').textContent;
 

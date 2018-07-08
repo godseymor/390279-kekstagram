@@ -3,6 +3,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var DEBOUNCE_INTERVAL = 500;
+  var currentURL = window.location.origin + '/';
   window.util = {
     lastTimeout: '',
     debounce: function (func) {
@@ -19,7 +20,8 @@
     },
     getArrayIndex: function (currentPhotoUrl, images) {
       for (var i = 0; i < images.length; i++) {
-        if (currentPhotoUrl === images[i].url) {
+        var photoLocation = currentURL + images[i].url;
+        if (currentPhotoUrl === photoLocation) {
           var arrayIndex = i;
         }
       }
