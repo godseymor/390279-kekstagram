@@ -47,10 +47,10 @@
     }
   ];
   var Sizes = {
-    initial: 100,
-    resize: 25
+    INITIAL: 100,
+    RESIZE: 25
   };
-  var currentSize = Sizes.initial;
+  var currentSize = Sizes.INITIAL;
 
   window.effects = {
     imgUploadScale: document.querySelector('.img-upload__scale')
@@ -98,9 +98,9 @@
       imgUploadPreview.classList.add('effects__preview--' + EFFECTS[i].name);
       imgUploadPreview.style.filter = '';
       imgUploadPreview.style.transform = '';
-      currentSize = Sizes.initial;
-      resizeInputValue.value = Sizes.initial + '%';
-      scaleValue.value = Sizes.initial;
+      currentSize = Sizes.INITIAL;
+      resizeInputValue.value = Sizes.INITIAL + '%';
+      scaleValue.value = Sizes.INITIAL;
       currentFilter = EFFECTS[i].name;
     });
   }
@@ -147,19 +147,19 @@
 
   function scalePhoto() {
     resizeInputValue.value = currentSize + '%';
-    imgUploadPreview.style.transform = 'scale(' + currentSize / Sizes.initial + ')';
+    imgUploadPreview.style.transform = 'scale(' + currentSize / Sizes.INITIAL + ')';
   }
 
   resizeMinus.addEventListener('click', function () {
-    if (currentSize > Sizes.resize) {
-      currentSize -= Sizes.resize;
+    if (currentSize > Sizes.RESIZE) {
+      currentSize -= Sizes.RESIZE;
       scalePhoto();
     }
   });
 
   resizePlus.addEventListener('click', function () {
-    if (currentSize < Sizes.initial) {
-      currentSize += Sizes.resize;
+    if (currentSize < Sizes.INITIAL) {
+      currentSize += Sizes.RESIZE;
       scalePhoto();
     }
   });
