@@ -46,11 +46,11 @@
       measure: ''
     }
   ];
-  var sizes = {
-    INITIAL: 100,
-    RESIZE: 25
+  var Sizes = {
+    initial: 100,
+    resize: 25
   };
-  var currentSize = 100;
+  var currentSize = Sizes.initial;
 
   window.effects = {
     imgUploadScale: document.querySelector('.img-upload__scale')
@@ -98,9 +98,9 @@
       imgUploadPreview.classList.add('effects__preview--' + EFFECTS[i].name);
       imgUploadPreview.style.filter = '';
       imgUploadPreview.style.transform = '';
-      currentSize = sizes.INITIAL;
-      resizeInputValue.value = sizes.INITIAL + '%';
-      scaleValue.value = sizes.INITIAL;
+      currentSize = Sizes.initial;
+      resizeInputValue.value = Sizes.initial + '%';
+      scaleValue.value = Sizes.initial;
       currentFilter = EFFECTS[i].name;
     });
   }
@@ -147,19 +147,19 @@
 
   function scalePhoto() {
     resizeInputValue.value = currentSize + '%';
-    imgUploadPreview.style.transform = 'scale(' + currentSize / sizes.INITIAL + ')';
+    imgUploadPreview.style.transform = 'scale(' + currentSize / Sizes.initial + ')';
   }
 
   resizeMinus.addEventListener('click', function () {
-    if (currentSize > sizes.RESIZE) {
-      currentSize -= sizes.RESIZE;
+    if (currentSize > Sizes.resize) {
+      currentSize -= Sizes.resize;
       scalePhoto();
     }
   });
 
   resizePlus.addEventListener('click', function () {
-    if (currentSize < sizes.INITIAL) {
-      currentSize += sizes.RESIZE;
+    if (currentSize < Sizes.initial) {
+      currentSize += Sizes.resize;
       scalePhoto();
     }
   });
